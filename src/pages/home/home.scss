@@ -1,0 +1,23 @@
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 0;
+  color: white;
+}
+
+.home-modules {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  .home-module-card {
+    margin: 0.5rem;
+  }
+}

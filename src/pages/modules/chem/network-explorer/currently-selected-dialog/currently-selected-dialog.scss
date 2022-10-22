@@ -1,0 +1,62 @@
+#chem-network-explore-dialog {
+  .explore-content{
+    .explore-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      width: 100%;
+    
+      .rule-type-form-control {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 90%;
+        max-width: 30rem;
+        margin: 0.5rem 0;
+      }
+
+      .explore-submit-button {
+        width: 90%;
+        height: 3.5rem;
+        max-width: 30rem;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  .add-reaction-input-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+
+    .reactant-smiles-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .reaction-label-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .reaction-smarts-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .add-reaction-submit-button {
+      width: 90%;
+      height: 3.5rem;
+      max-width: 30rem;
+      margin-top: 0.5rem;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.file-input-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-icon {
+  transform: scale(1.5);
+  margin-bottom: 0.25rem;
+}
+
+.form-title {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  .browse-button {
+    margin-right: 0.25rem;
+  }
+  .submit-button {
+    padding: 0 1.25rem;
+    margin-left: 0.25rem;
+  }
+}
+
+.file-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0 0.5rem;
+  margin: 0;
+}

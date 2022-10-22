@@ -1,0 +1,64 @@
+.form-input {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .task-progress {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    .progress-statement {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+  }
+
+  .input-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    .target-smiles-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    .max-depth-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .max-iteration-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .max-running-time-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .max-pathway-displayed-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .submit-button {
+      width: 90%;
+      height: 4rem;
+      max-width: 30rem;
+      margin-top: 0.5rem;
+    }
+  }
+  
+}

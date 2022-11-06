@@ -507,6 +507,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
             <StartIcon />
           </IconButton>
           <ExploreDrawer
+            width={250}
             open={this.state.openExploreDrawer}
             onClose={this.handleExploreDrawerClose}
             onLayoutApply={this.handleVisNetworkLayoutApply}

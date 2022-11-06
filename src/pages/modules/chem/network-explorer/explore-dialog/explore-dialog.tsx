@@ -35,7 +35,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {NodeData, GraphData, EdgeData} from "../../../../../utils/base";
 import {secondToHHMMSS} from "../../../../../utils/time";
-import "./currently-selected-dialog.scss"
+import "./explore-dialog.scss"
 
 function PaperComponent(props: PaperProps) {
   return (

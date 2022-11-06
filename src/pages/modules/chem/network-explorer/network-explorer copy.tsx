@@ -15,7 +15,7 @@ import {NodeData, EdgeData, GraphData, VisData} from "../../../../utils/base";
 import {secondToHHMMSS} from "../../../../utils/time";
 import FileInput from "../../../../shared/file-input";
 import FormInput from "./new-task"
-import ExploreDialog from "./currently-selected-dialog"
+import ExploreDialog from "./explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./network-explorer.scss"
 import { display } from "@mui/system";

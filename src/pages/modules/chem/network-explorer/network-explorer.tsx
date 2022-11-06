@@ -1,6 +1,7 @@
 import React from "react";
 import MuiAlert, { AlertProps, AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import IconButton from '@mui/material/IconButton';
 import Snackbar from "@mui/material/Snackbar";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -9,13 +10,15 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import CreateIcon from "@mui/icons-material/Create";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import SaveIcon from "@mui/icons-material/Save";
+import StartIcon from '@mui/icons-material/Start';
 import {Network as VisNetwork, Options as VisOptions, IdType as VisIdType} from "vis-network";
 import {DataSet as VisDataSet} from "vis-data";
 import {NodeData, EdgeData, GraphData, VisData} from "../../../../utils/base";
 import {secondToHHMMSS} from "../../../../utils/time";
 import FileInput from "../../../../shared/file-input";
 import FormInput from "./new-task"
-import ExploreDialog from "./currently-selected-dialog"
+import ExploreDrawer from "./explore-drawer"
+import ExploreDialog from "./explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./network-explorer.scss"
 
@@ -37,6 +40,7 @@ export interface NetworkExplorerState {
   openSnackbar: boolean;
   alertSeverity: AlertColor;
   snackbarMessage: string;
+  openExploreDrawer: boolean;
   openExploreDialog: boolean;
   openSaveDialog: boolean;
 }
@@ -71,6 +75,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
       openSnackbar: false,
       alertSeverity: "info",
       snackbarMessage: "",
+      openExploreDrawer: false,
       openExploreDialog: false,
       openSaveDialog: false
     };
@@ -82,6 +87,9 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
     this.handleFormInputSubmit = this.handleFormInputSubmit.bind(this);
     this.handleFormInputRespond = this.handleFormInputRespond.bind(this);
     this.handleFileInputSubmit = this.handleFileInputSubmit.bind(this);
+    this.handleOpenExploreDrawerButtonClick = this.handleOpenExploreDrawerButtonClick.bind(this);
+    this.handleVisNetworkLayoutApply = this.handleVisNetworkLayoutApply.bind(this);
+    this.handleExploreDrawerClose = this.handleExploreDrawerClose.bind(this);
     this.handleExploreDialogClose = this.handleExploreDialogClose.bind(this);
     this.handleNextExploreSubmit = this.handleNextExploreSubmit.bind(this);
     this.handleNextExploreRespond = this.handleNextExploreRespond.bind(this);
@@ -353,8 +361,21 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
     };
   }
 
+  handleOpenExploreDrawerButtonClick() {
+    this.setState({openExploreDrawer: true});
+  }
+
   handleExploreDialogClose() {
     this.setState({openExploreDialog: false});
+  }
+
+  handleExploreDrawerClose() {
+    this.setState({openExploreDrawer: false});
+  }
+
+  handleVisNetworkLayoutApply(layout: any) {
+    this.visOptions.layout = layout;
+    this.visNetwork!.setOptions(this.visOptions);
   }
 
   handleNextExploreSubmit() {
@@ -476,6 +497,20 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
       mainElement = (
         <div className="explore-module">
           <div className="network-viewer" ref={this.visViewerRef} />
+          <IconButton aria-label="start-icon" color="primary"
+            sx={{
+              position: "absolute",
+              margin: "1rem"
+            }}
+            onClick={this.handleOpenExploreDrawerButtonClick}
+          >
+            <StartIcon />
+          </IconButton>
+          <ExploreDrawer
+            open={this.state.openExploreDrawer}
+            onClose={this.handleExploreDrawerClose}
+            onLayoutApply={this.handleVisNetworkLayoutApply}
+          />
           <ExploreDialog
             data={{node: this.selectedNode}}
             open={this.state.openExploreDialog}

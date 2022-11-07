@@ -214,7 +214,7 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
                         onChange={this.handleLayoutHierarchicalDirectionChange}
                       >
                         <FormControlLabel value="LR" control={<Radio />} label="LR" />
-                        <FormControlLabel value="UD" control={<Radio />} label="UD" />
+                        <FormControlLabel value="DU" control={<Radio />} label="DU" />
                       </RadioGroup>
                     </FormControl>
                   </FormControl>

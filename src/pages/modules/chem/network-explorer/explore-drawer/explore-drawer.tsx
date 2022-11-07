@@ -73,7 +73,7 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
       openLayoutControl: false,
       context: '',
       layoutHierarchicalEnabled: false,
-      layoutHierarchicalDirection: "RL",
+      layoutHierarchicalDirection: "LR",
     };
     this.handleLegendButtonClick = this.handleLegendButtonClick.bind(this);
     this.handleLayoutButtonClick = this.handleLayoutButtonClick.bind(this);
@@ -100,6 +100,7 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
       hierarchical: {
         enabled: event.target.checked,
         direction: this.state.layoutHierarchicalDirection,
+        sortMethod: "directed"
       }
     })
   }
@@ -110,6 +111,7 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
       hierarchical: {
         enabled: this.state.layoutHierarchicalEnabled,
         direction: event.target.value,
+        sortMethod: "directed"
       }
     })
   }
@@ -211,10 +213,8 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
                         value={this.state.layoutHierarchicalDirection}
                         onChange={this.handleLayoutHierarchicalDirectionChange}
                       >
-                        {/* <FormControlLabel value="UD" control={<Radio />} label="UD" />
-                        <FormControlLabel value="DU" control={<Radio />} label="DU" /> */}
                         <FormControlLabel value="LR" control={<Radio />} label="LR" />
-                        <FormControlLabel value="RL" control={<Radio />} label="RL" />
+                        <FormControlLabel value="UD" control={<Radio />} label="UD" />
                       </RadioGroup>
                     </FormControl>
                   </FormControl>

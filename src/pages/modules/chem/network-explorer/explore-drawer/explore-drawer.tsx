@@ -35,6 +35,7 @@ import intermediateLegend from "../../../../../assets/images/legends/intermediat
 import substrateLegend from "../../../../../assets/images/legends/substrate.svg"
 import reactionKeyLegend from "../../../../../assets/images/legends/reaction-key.svg"
 import reactionAuxiliaryLegend from "../../../../../assets/images/legends/reaction-auxiliary.svg"
+import reactionManualLegend from "../../../../../assets/images/legends/reaction-manual.svg"
 import "./explore-drawer.scss"
 
 function PaperComponent(props: PaperProps) {
@@ -176,6 +177,12 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
                       <img src={reactionAuxiliaryLegend} style={{width: "1rem"}} />
                     </ListItemIcon>
                     <ListItemText primary="reaction (auxiliary)" />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <img src={reactionManualLegend} style={{width: "1rem"}} />
+                    </ListItemIcon>
+                    <ListItemText primary="reaction (manual)" />
                   </ListItem>
               </List>
             </Collapse>

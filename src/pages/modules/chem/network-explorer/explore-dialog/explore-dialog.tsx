@@ -253,12 +253,12 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
   }
 
   handleAddButtonClick() {
-    this.props.showReaction(this.state.allReactionNodes[this.state.showedReactionIndex - 1]);
+    this.props.showReaction(this.state.partialReactionNodes[this.state.showedReactionIndex - 1]);
     this.setState({networkUpdateTime: new Date()});
   }
 
   handleRemoveButtonClick() {
-    this.props.hideReaction(this.state.allReactionNodes[this.state.showedReactionIndex - 1]);
+    this.props.hideReaction(this.state.partialReactionNodes[this.state.showedReactionIndex - 1]);
     this.setState({networkUpdateTime: new Date()});
   }
 

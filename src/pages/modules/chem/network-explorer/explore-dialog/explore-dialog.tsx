@@ -351,30 +351,30 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
         if (this.state.history[this.state.history.length - 1] === "currently-selected") {
           let exploreButtonElement: JSX.Element;
           let dialogActionsChildrenElement: JSX.Element;
-          if (this.props.data.node.metadata.type === "substrate") { // || this.props.data.node.metadata.isExplored
-            exploreButtonElement = (
+          // if (this.props.data.node.metadata.type === "substrate") { // || this.props.data.node.metadata.isExplored
+          //   exploreButtonElement = (
+          //     <IconButton 
+          //       color="primary"
+          //       aria-label="explore"
+          //       onClick={this.handleExploreButtonClick}
+          //       disabled={true}
+          //     >
+          //       <ExploreIcon />
+          //     </IconButton>
+          //   )
+          // } else {
+          exploreButtonElement = (
+            <Tooltip title="Explore">
               <IconButton 
                 color="primary"
                 aria-label="explore"
                 onClick={this.handleExploreButtonClick}
-                disabled={true}
               >
                 <ExploreIcon />
               </IconButton>
-            )
-          } else {
-            exploreButtonElement = (
-              <Tooltip title="Explore">
-                <IconButton 
-                  color="primary"
-                  aria-label="explore"
-                  onClick={this.handleExploreButtonClick}
-                >
-                  <ExploreIcon />
-                </IconButton>
-              </Tooltip>
-            )
-          }
+            </Tooltip>
+          )
+          // }
           dialogActionsChildrenElement = (
             <>
               {exploreButtonElement}

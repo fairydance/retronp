@@ -325,7 +325,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                   <b>Score:</b>&nbsp;{this.props.data.node.metadata.score}
                 </div>}
                 <div style={{width: "100%", wordBreak: "break-all"}}>
-                  <b>SMARTS:</b>&nbsp;{this.props.data.node.metadata.smarts}
+                  <b>SMARTS:</b>&nbsp;{this.props.data.node.metadata.smarts!.split('\n').flatMap((line, index) => index > 0 ? [<br />, line] : line)}
                 </div>
               </DialogContentText>
             </DialogContent>

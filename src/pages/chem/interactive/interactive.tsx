@@ -17,7 +17,7 @@ import {NodeData, EdgeData, GraphData, VisData} from "../../../utils/base";
 import {secondToHHMMSS} from "../../../utils/time";
 import FileInput from "../../../shared/file-input";
 import FormInput from "./new-task"
-import ExploreDrawer from "./explore-drawer"
+import ExploreDrawer from "../explore-drawer"
 import ExploreDialog from "./explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./interactive.scss"
@@ -50,7 +50,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   graphData: GraphData;
   visViewerRef: React.RefObject<HTMLInputElement>;
   visData: VisData;
-  visOptions!: VisOptions;
+  visOptions: VisOptions;
   visNetwork: VisNetwork | undefined;
   private clickTime: Date;
   private doubleClickTime: Date;
@@ -65,7 +65,17 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
       nodes: new VisDataSet<any>([]),
       edges: new VisDataSet<any>([])
     };
-    this.visOptions = {height: '0', clickToUse: true};
+    this.visOptions = {
+      height: '0',
+      clickToUse: true,
+      layout: {
+        hierarchical: {
+          enabled: false,
+          direction: "LR",
+          sortMethod: "directed"
+        }
+      }
+    };
     this.clickTime = new Date();
     this.doubleClickTime = new Date();
     this.doubleClickThreshold = 50;
@@ -115,10 +125,8 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   }
 
   componentDidUpdate() {
-    if (this.state.currentAction === "Explore") {
-      this.visOptions.height = `${this.visViewerRef.current!.offsetHeight}px`;
-      this.visNetwork!.setOptions(this.visOptions);
-    }
+    this.visOptions.height = `${this.visViewerRef.current!.offsetHeight}px`;
+    this.visNetwork!.setOptions(this.visOptions);
   }
 
   componentWillUnmount() {
@@ -126,7 +134,6 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   }
 
   initEmptyVisNetwork() {
-    this.visOptions = {height: '0', clickToUse: true};
     this.visNetwork = new VisNetwork(this.visViewerRef.current!, {}, this.visOptions);
     this.visNetwork.on("click", (params: any) => {
       this.clickTime = new Date();
@@ -365,17 +372,17 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
     this.setState({openExploreDrawer: true});
   }
 
-  handleExploreDialogClose() {
-    this.setState({openExploreDialog: false});
+  handleVisNetworkLayoutApply(layout: any) {
+    this.visOptions.layout = layout;
+    this.visNetwork!.setOptions(this.visOptions);
   }
 
   handleExploreDrawerClose() {
     this.setState({openExploreDrawer: false});
   }
 
-  handleVisNetworkLayoutApply(layout: any) {
-    this.visOptions.layout = layout;
-    this.visNetwork!.setOptions(this.visOptions);
+  handleExploreDialogClose() {
+    this.setState({openExploreDialog: false});
   }
 
   handleNextExploreSubmit() {
@@ -443,6 +450,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   }
 
   handleNewActionClick() {
+    this.visOptions.layout.hierarchical.enabled = false;
     this.setState({
       currentAction: "New",
       openSnackbar: false
@@ -450,6 +458,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   }
 
   handleOpenActionClick() {
+    this.visOptions.layout.hierarchical.enabled = false;
     this.setState({
       currentAction: "Open",
       openSnackbar: false
@@ -509,6 +518,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
           <ExploreDrawer
             width={250}
             open={this.state.openExploreDrawer}
+            initData={{layout: this.visOptions.layout}}
             onClose={this.handleExploreDrawerClose}
             onLayoutApply={this.handleVisNetworkLayoutApply}
           />

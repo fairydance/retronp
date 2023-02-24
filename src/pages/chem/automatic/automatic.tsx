@@ -1,6 +1,7 @@
 import React from "react";
 import MuiAlert, { AlertProps, AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import IconButton from '@mui/material/IconButton';
 import Pagination from "@mui/material/Pagination";
 import Snackbar from "@mui/material/Snackbar";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -10,12 +11,14 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import CreateIcon from "@mui/icons-material/Create";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import SaveIcon from "@mui/icons-material/Save";
+import StartIcon from '@mui/icons-material/Start';
 import {Network as VisNetwork, Options as VisOptions, IdType as VisIdType} from "vis-network";
 import {DataSet as VisDataSet} from "vis-data";
 import {NodeData, GraphData, VisData} from "../../../utils/base";
 import {secondToHHMMSS} from "../../../utils/time";
 import FileInput from "../../../shared/file-input";
 import FormInput from "./form-input"
+import ExploreDrawer from "../explore-drawer"
 import ExploreDialog from "./explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./automatic.scss"
@@ -39,6 +42,7 @@ export interface PathwayExplorerState {
   openSnackbar: boolean;
   alertSeverity: AlertColor;
   snackbarMessage: string;
+  openExploreDrawer: boolean;
   openExploreDialog: boolean;
   openSaveDialog: boolean;
 }
@@ -48,7 +52,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   graphDataArray: GraphData[];
   visViewerRef: React.RefObject<HTMLInputElement>;
   visData: VisData;
-  visOptions!: VisOptions;
+  visOptions: VisOptions;
   visNetwork: VisNetwork | undefined;
   updateVisNetwork: boolean;
   private clickTime: Date;
@@ -64,7 +68,17 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
       nodes: new VisDataSet<any>([]),
       edges: new VisDataSet<any>([])
     };
-    this.visOptions = {height: '0', clickToUse: true};
+    this.visOptions = {
+      height: '0',
+      clickToUse: true,
+      layout: {
+        hierarchical: {
+          enabled: false,
+          direction: "LR",
+          sortMethod: "directed"
+        }
+      }
+    };
     this.updateVisNetwork = true;
     this.clickTime = new Date();
     this.doubleClickTime = new Date();
@@ -76,6 +90,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
       openSnackbar: false,
       alertSeverity: "info",
       snackbarMessage: "",
+      openExploreDrawer: false,
       openExploreDialog: false,
       openSaveDialog: false
     };
@@ -84,6 +99,9 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
     this.handleFormInputRespond = this.handleFormInputRespond.bind(this);
     this.handleFileInputSubmit = this.handleFileInputSubmit.bind(this);
     this.handlePathwayChange = this.handlePathwayChange.bind(this);
+    this.handleOpenExploreDrawerButtonClick = this.handleOpenExploreDrawerButtonClick.bind(this);
+    this.handleVisNetworkLayoutApply = this.handleVisNetworkLayoutApply.bind(this);
+    this.handleExploreDrawerClose = this.handleExploreDrawerClose.bind(this);
     this.handleExploreDialogClose = this.handleExploreDialogClose.bind(this);
     this.handleSaveDialogClose = this.handleSaveDialogClose.bind(this);
     this.handlePathwaySave = this.handlePathwaySave.bind(this);
@@ -106,10 +124,8 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   componentDidUpdate() {
-    if (this.state.currentAction === "Explore") {
-      this.visOptions.height = `${this.visViewerRef.current!.offsetHeight}px`;
-      this.visNetwork!.setOptions(this.visOptions);
-    }
+    this.visOptions.height = `${this.visViewerRef.current!.offsetHeight}px`;
+    this.visNetwork!.setOptions(this.visOptions);
   }
 
   componentWillUnmount() {
@@ -117,7 +133,6 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   initEmptyVisNetwork() {
-    this.visOptions = {height: '0', clickToUse: true};
     this.visNetwork = new VisNetwork(this.visViewerRef.current!, {}, this.visOptions);
     this.visNetwork.on("click", (params: any) => {
       this.clickTime = new Date();
@@ -191,6 +206,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
     if (data.status.success) {
       this.graphDataArray = data.graphs;
       this.loadVisData(this.graphDataArray[0]);
+      this.visOptions.layout.hierarchical.enabled = true;
       this.setState({
         currentAction: "Explore",
         currentGraphIdx: 0,
@@ -213,8 +229,9 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
     const fileReader = new FileReader();
     fileReader.readAsText(files[0], "UTF-8");
     fileReader.onload = event => {
-      this.graphDataArray = JSON.parse(event.target!.result as string).graphs
+      this.graphDataArray = JSON.parse(event.target!.result as string).graphs;
       this.loadVisData(this.graphDataArray[0]);
+      this.visOptions.layout.hierarchical.enabled = true;
       this.setState({
         currentAction: "Explore",
         currentGraphIdx: 0
@@ -226,6 +243,19 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
     this.loadVisData(this.graphDataArray[value - 1]);
     this.setState({currentGraphIdx: value - 1});
   };
+
+  handleOpenExploreDrawerButtonClick() {
+    this.setState({openExploreDrawer: true});
+  }
+
+  handleVisNetworkLayoutApply(layout: any) {
+    this.visOptions.layout = layout;
+    this.visNetwork!.setOptions(this.visOptions);
+  }
+
+  handleExploreDrawerClose() {
+    this.setState({openExploreDrawer: false});
+  }
 
   handleExploreDialogClose() {
     this.setState({openExploreDialog: false});
@@ -248,6 +278,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   handleNewActionClick() {
+    this.visOptions.layout.hierarchical.enabled = false;
     this.setState({
       currentAction: "New",
       openSnackbar: false
@@ -255,6 +286,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   handleOpenActionClick() {
+    this.visOptions.layout.hierarchical.enabled = false;
     this.setState({
       currentAction: "Open",
       openSnackbar: false
@@ -262,6 +294,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   handleExploreActionClick() {
+    this.visOptions.layout.hierarchical.enabled = true;
     this.setState({
       currentAction: "Explore",
       openSnackbar: false
@@ -307,6 +340,22 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
             className="pathway-chooser"
             count={this.graphDataArray.length}
             onChange={this.handlePathwayChange}
+          />
+          <IconButton aria-label="start-icon" color="primary"
+            sx={{
+              position: "absolute",
+              margin: "1rem"
+            }}
+            onClick={this.handleOpenExploreDrawerButtonClick}
+          >
+            <StartIcon />
+          </IconButton>
+          <ExploreDrawer
+            width={250}
+            open={this.state.openExploreDrawer}
+            initData={{layout: this.visOptions.layout}}
+            onClose={this.handleExploreDrawerClose}
+            onLayoutApply={this.handleVisNetworkLayoutApply}
           />
           <ExploreDialog
             data={{node: this.selectedNode}}

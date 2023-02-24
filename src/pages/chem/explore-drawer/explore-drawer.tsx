@@ -30,12 +30,12 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import StarBorder from '@mui/icons-material/StarBorder';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
-import targetLegend from "../../../../assets/images/legends/target.svg"
-import intermediateLegend from "../../../../assets/images/legends/intermediate.svg"
-import substrateLegend from "../../../../assets/images/legends/substrate.svg"
-import reactionKeyLegend from "../../../../assets/images/legends/reaction-key.svg"
-import reactionAuxiliaryLegend from "../../../../assets/images/legends/reaction-auxiliary.svg"
-import reactionManualLegend from "../../../../assets/images/legends/reaction-manual.svg"
+import targetLegend from "../../../assets/images/legends/target.svg"
+import intermediateLegend from "../../../assets/images/legends/intermediate.svg"
+import substrateLegend from "../../../assets/images/legends/substrate.svg"
+import reactionKeyLegend from "../../../assets/images/legends/reaction-key.svg"
+import reactionAuxiliaryLegend from "../../../assets/images/legends/reaction-auxiliary.svg"
+import reactionManualLegend from "../../../assets/images/legends/reaction-manual.svg"
 import "./explore-drawer.scss"
 
 function PaperComponent(props: PaperProps) {
@@ -52,12 +52,12 @@ function PaperComponent(props: PaperProps) {
 export interface ExploreDrawerProps {
   width: number;
   open: boolean;
+  initData: {layout: any}
   onClose: () => void;
   onLayoutApply: (layout: any) => void;
 }
 
 export interface ExploreDrawerState {
-  openDialog: boolean;
   openLegendList: boolean;
   openLayoutControl: boolean;
   context: string;
@@ -69,12 +69,11 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
   constructor(props: ExploreDrawerProps) {
     super(props);
     this.state = {
-      openDialog: false,
       openLegendList: false,
       openLayoutControl: false,
       context: '',
-      layoutHierarchicalEnabled: false,
-      layoutHierarchicalDirection: "LR",
+      layoutHierarchicalEnabled: this.props.initData.layout.hierarchical.enabled,
+      layoutHierarchicalDirection: this.props.initData.layout.hierarchical.direction,
     };
     this.handleLegendButtonClick = this.handleLegendButtonClick.bind(this);
     this.handleLayoutButtonClick = this.handleLayoutButtonClick.bind(this);
@@ -90,10 +89,6 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
   handleLayoutButtonClick() {
     this.setState((state, props) => ({openLayoutControl: !state.openLayoutControl}));
   }
-
-  // handleDialogClose() {
-  //   this.setState({openDialog: false});
-  // }
 
   handleLayoutHierarchicalEnabledChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({layoutHierarchicalEnabled: event.target.checked});
@@ -118,7 +113,6 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
   }
 
   render() {
-    // let dialogElement: JSX.Element;
     return (
       <Box>
       <Drawer
@@ -231,7 +225,6 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
           </List>
         </Box>
       </Drawer>
-      {/* {dialogElement} */}
     </Box>
     );
   }

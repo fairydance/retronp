@@ -1,0 +1,50 @@
+.chem-interactive-retrosynthesis-new-task {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .task-progress {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    .progress-statement {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+  }
+
+  .input-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    .target-smiles-text-field {
+      width: 90%;
+      max-width: 30rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    .rule-type-form-control {
+      display: flex;
+      // flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 90%;
+      max-width: 30rem;
+      margin: 0.5rem 0;
+    }
+
+    .submit-button {
+      width: 90%;
+      height: 3.5rem;
+      max-width: 30rem;
+      margin-top: 0.5rem;
+    }
+  }
+  
+}

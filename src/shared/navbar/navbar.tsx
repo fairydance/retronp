@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Link as RouterLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -64,7 +64,7 @@ export default class NavBar extends React.Component<NavBarProps, NavBarState> {
             <Typography
               variant="h6"
               noWrap
-              component={RouterLink}
+              component={NavLink}
               to="/"
               sx={{
                 mr: 2,
@@ -111,7 +111,7 @@ export default class NavBar extends React.Component<NavBarProps, NavBarState> {
                 {pages.map((page) => (
                   <MenuItem key={page.name} onClick={this.handleCloseNavMenu}>
                     <Typography
-                      component={RouterLink}
+                      component={NavLink}
                       to={page.path}
                       textAlign="center"
                       sx={{
@@ -129,7 +129,7 @@ export default class NavBar extends React.Component<NavBarProps, NavBarState> {
             <Typography
               variant="h5"
               noWrap
-              component={RouterLink}
+              component={NavLink}
               to="/"
               sx={{
                 mr: 2,
@@ -148,10 +148,10 @@ export default class NavBar extends React.Component<NavBarProps, NavBarState> {
               {pages.map((page) => (
                 <Button
                   key={page.name}
-                  component={RouterLink}
+                  component={NavLink}
                   to={page.path}
                   onClick={this.handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{my: 2, color: 'white', display: 'block', '&.active': {backgroundColor: 'primary.dark'}}}
                 >
                   {page.name}
                 </Button>

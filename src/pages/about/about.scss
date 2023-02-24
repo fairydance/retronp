@@ -1,0 +1,47 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .panel-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  .about-main {
+    align-self: center;
+    width: 90%;
+    max-width: 70rem;
+    // box-sizing: border-box;
+    // border: 1px solid #c4c4c4;
+    // height: 50rem;
+    p {
+      font-size: 1.5rem;
+      text-align: justify;
+    }
+    h2 {
+      font-size: 2rem;
+      text-align: justify;
+    }
+    ol {
+      font-size: 1.5rem;
+      text-align: justify;
+    }
+    .code-inline {
+      background-color: #f8f8f8;
+      box-sizing: border-box;
+      border: 1px solid #e7eaed;
+      border-radius: 4px;
+    }
+    .code-block {
+      background-color: #f8f8f8;
+      padding: 0.5rem;
+      box-sizing: border-box;
+      border: 1px solid #e7eaed;
+      border-radius: 4px;
+    }
+  }
+}

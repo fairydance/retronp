@@ -8,6 +8,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import "./home.scss"
 
@@ -32,7 +33,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
   render() {
     return (
-      <div className="home">
+      <Box className="home">
         <Box className="home-header"
           sx={{
             backgroundColor: "primary.main",
@@ -41,23 +42,41 @@ export default class Home extends React.Component<HomeProps, HomeState> {
           <h1>RetroNP</h1>
           <p>Retrosynthetic Planning for Natural Products</p>
         </Box>
-        <div className="home-modules">
-          <Button
-            className="home-module-card"
-            component={RouterLink}
-            to="/modules/chem"
-          >
-            Chem Module
-          </Button>
-          <Button
-            className="home-module-card"
-            component={RouterLink}
-            to="/modules/bio"
-          >
-            Bio Module
-          </Button>
-        </div>
-      </div>
+        <Box className="home-main">
+          <Box className="home-section-title" sx={{color: "primary.main"}}>Modules</Box>
+          <Divider />
+          <Box className="home-modules">
+            <Card className="home-module-card" sx={{ width: "100%" }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Chem
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  This is chem module. [TODO]
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button component={RouterLink} to="chem/interactive" sx={{ width: "100%" }}>Interactive</Button>
+                <Button component={RouterLink} to="chem/automatic" sx={{ width: "100%" }}>Automatic</Button>
+              </CardActions>
+            </Card>
+            <Card className="home-module-card" sx={{ width: "100%" }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Bio
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  This is bio module. [TODO]
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button component={RouterLink} to="bio/interactive" sx={{ width: "100%" }}>Interactive</Button>
+                <Button component={RouterLink} to="bio/automatic" sx={{ width: "100%" }}>Automatic</Button>
+              </CardActions>
+            </Card>
+          </Box>
+        </Box>
+      </Box>
     );
   }
 }

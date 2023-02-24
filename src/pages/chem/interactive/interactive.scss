@@ -1,0 +1,55 @@
+.interactive-retrosynthesis {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .interactive-retrosynthesis-header-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // padding: 5rem 0;
+    color: white;
+  }
+
+  .new-module {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    // border: 1px solid blue;
+  }
+
+  .open-module {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .explore-module {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    .network-viewer {
+      flex: 1;
+    }
+  }
+
+  .speed-dail {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  // .explore-dialog-content {
+  //   .node-info {
+  //     display: flex;
+  //     flex-direction: column;
+  //     justify-content: center;
+  //     align-items: center;
+  //     border: 1px solid blue;
+  //     img {
+  //       border: 1px solid gray;
+  //     }
+  //   }
+  // }
+}

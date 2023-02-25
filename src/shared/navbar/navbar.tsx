@@ -161,7 +161,7 @@ export default class NavBar extends React.Component<NavBarProps, NavBarState> {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Haoyu Lin" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Haoyu Lin" />
                 </IconButton>
               </Tooltip>
               <Menu

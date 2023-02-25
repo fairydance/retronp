@@ -577,6 +577,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                       onChange={this.handleVisualizeRuleTypeChange}
                     >
                       <Tab label="Key" value="key" />
+                      <Tab label="Two Step" value="two_step" />
                       <Tab label="Auxiliary" value="auxiliary" />
                       <Tab label="Manual" value="manual" />
                     </Tabs>

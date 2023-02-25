@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import LinearProgress from '@mui/material/LinearProgress';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -11,9 +10,10 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import {GraphData} from "../../../../utils/base";
 import {secondToHHMMSS} from "../../../../utils/time";
-import "./new-task.scss";
+import "./form-input.scss";
 
 export interface FormInputProps {
+  requestURL: string;
   onSubmit: () => void;
   onRespond: (data: {status: {success: boolean, message: string}, graph: GraphData}, timeElapsed: number) => void;
 }
@@ -62,14 +62,10 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
     this.setState({running: true, startTime: new Date(), endTime: new Date()});
     const timerID = setInterval(this.tick, 1000);
     this.props.onSubmit();
-    fetch('http://162.105.160.202:5000/retronp/api/chem/network-predict', {
+    fetch(this.props.requestURL, {
       method: 'POST',
       body: formData,
     })
-    // fetch('/api/network-predict', {
-    //   method: 'POST',
-    //   body: formData,
-    // })
     .then(res => res.json())
     .then(data => {
       this.props.onRespond(data, Math.floor((this.state.endTime.getTime() - this.state.startTime.getTime()) / 1000));

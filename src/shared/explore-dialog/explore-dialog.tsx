@@ -11,7 +11,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import IconButton from "@mui/material/IconButton";
-import InputAdornment from '@mui/material/InputAdornment';
 import Pagination from "@mui/material/Pagination";
 import Paper, { PaperProps } from "@mui/material/Paper";
 import Radio from '@mui/material/Radio';
@@ -20,7 +19,6 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabPanel from '@mui/lab/TabPanel';
 import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/Add';
 import AlarmIcon from '@mui/icons-material/Alarm';
@@ -29,12 +27,11 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ExploreIcon from '@mui/icons-material/Explore';
-import InfoIcon from '@mui/icons-material/Info';
 import ListIcon from '@mui/icons-material/List';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import RemoveIcon from '@mui/icons-material/Remove';
-import {NodeData, GraphData, EdgeData} from "../../../../utils/base";
-import {secondToHHMMSS} from "../../../../utils/time";
+import {NodeData, GraphData, EdgeData} from "../../utils/base";
+import {secondToHHMMSS} from "../../utils/time";
 import "./explore-dialog.scss"
 
 function PaperComponent(props: PaperProps) {
@@ -51,6 +48,8 @@ function PaperComponent(props: PaperProps) {
 export interface ExploreDialogProps {
   data: {node: NodeData | undefined;};
   open: boolean;
+  exploreRequestURL: string;
+  addReactionRequestURL: string;
   onClose: () => void;
   onExploreSubmit: () => void;
   onExploreRespond: (data: {status: {success: boolean, message: string}, graph: GraphData}, timeElapsed: number) => void;
@@ -79,6 +78,14 @@ export interface ExploreDialogState {
 }
 
 export default class ExploreDialog extends React.Component<ExploreDialogProps, ExploreDialogState> {
+  public static defaultProps = {
+    exploreRequestURL: '',
+    addReactionRequestURL: '',
+    onExploreSubmit: () => null,
+    onExploreRespond: () => null,
+    onAddReaction: () => null,
+  };
+
   constructor(props: ExploreDialogProps) {
     super(props);
     this.state = {
@@ -156,14 +163,10 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
     this.setState({exploringReaction: true, startTime: new Date(), endTime: new Date()});
     const timerID = setInterval(this.tick, 1000);
     this.props.onExploreSubmit();
-    fetch('http://162.105.160.202:5000/retronp/api/chem/network-predict', {
+    fetch(this.props.exploreRequestURL, {
       method: 'POST',
       body: formData,
     })
-    // fetch('/api/network-predict', {
-    //   method: 'POST',
-    //   body: formData,
-    // })
     .then(res => res.json())
     .then(data => {
       this.props.onExploreRespond(data, Math.floor((this.state.endTime.getTime() - this.state.startTime.getTime()) / 1000));
@@ -199,7 +202,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
     formData.append("reactionLabel", this.state.reactionLabel);
     formData.append("reactionSmarts", this.state.reactionSmarts);
     this.setState({addingReaction: true});
-    fetch('http://162.105.160.202:5000/retronp/api/smiles-to-reaction', {
+    fetch(this.props.addReactionRequestURL, {
       method: 'POST',
       body: formData,
     })
@@ -377,8 +380,8 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
           // }
           dialogActionsChildrenElement = (
             <>
-              {exploreButtonElement}
-              <Tooltip title="Add a reaction">
+              {this.props.exploreRequestURL ? exploreButtonElement : null}
+              {this.props.addReactionRequestURL ? (<Tooltip title="Add a reaction">
                 <IconButton 
                   color="primary"
                   aria-label="add a reaction"
@@ -387,7 +390,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                 >
                   <PlaylistAddIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip>) : null}
               <Tooltip title="View all reactions">
                 <IconButton 
                   color="primary"

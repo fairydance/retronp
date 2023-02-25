@@ -29,9 +29,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export interface NetworkExplorerProps {}
+export interface InteractiveProps {}
 
-export interface NetworkExplorerState {
+export interface InteractiveState {
   currentAction: string;
   hideSpeedDial: boolean;
   openSnackbar: boolean;
@@ -41,7 +41,7 @@ export interface NetworkExplorerState {
   openSaveDialog: boolean;
 }
 
-export default class NetworkExplorer extends React.Component<NetworkExplorerProps, NetworkExplorerState> {
+export default class Interactive extends React.Component<InteractiveProps, InteractiveState> {
   actions: Action[];
   graphData: GraphData;
   visViewerRef: React.RefObject<HTMLInputElement>;
@@ -53,7 +53,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   private doubleClickThreshold: number;
   private selectedNode: NodeData | undefined;
 
-  constructor(props: NetworkExplorerProps) {
+  constructor(props: InteractiveProps) {
     super(props);
     this.graphData = {nodes: [], edges: []};
     this.visViewerRef = React.createRef();

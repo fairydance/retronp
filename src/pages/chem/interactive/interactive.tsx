@@ -16,9 +16,9 @@ import {DataSet as VisDataSet} from "vis-data";
 import {NodeData, EdgeData, GraphData, VisData} from "../../../utils/base";
 import {secondToHHMMSS} from "../../../utils/time";
 import FileInput from "../../../shared/file-input";
-import FormInput from "./new-task"
-import ExploreDrawer from "../explore-drawer"
-import ExploreDialog from "./explore-dialog"
+import FormInput from "./form-input"
+import ExploreDrawer from "../../../shared/explore-drawer"
+import ExploreDialog from "../../../shared/explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./interactive.scss"
 
@@ -32,9 +32,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export interface NetworkExplorerProps {}
+export interface InteractiveProps {}
 
-export interface NetworkExplorerState {
+export interface InteractiveState {
   currentAction: string;
   hideSpeedDial: boolean;
   openSnackbar: boolean;
@@ -45,7 +45,7 @@ export interface NetworkExplorerState {
   openSaveDialog: boolean;
 }
 
-export default class NetworkExplorer extends React.Component<NetworkExplorerProps, NetworkExplorerState> {
+export default class Interactive extends React.Component<InteractiveProps, InteractiveState> {
   actions: Action[];
   graphData: GraphData;
   visViewerRef: React.RefObject<HTMLInputElement>;
@@ -57,7 +57,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
   private doubleClickThreshold: number;
   private selectedNode: NodeData | undefined;
 
-  constructor(props: NetworkExplorerProps) {
+  constructor(props: InteractiveProps) {
     super(props);
     this.graphData = {nodes: [], edges: []};
     this.visViewerRef = React.createRef();
@@ -487,6 +487,7 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
         <div className="new-module">
           <div className="network-viewer" ref={this.visViewerRef} style={{display: "none"}} />
           <FormInput
+            requestURL={"http://162.105.160.202:5000/retronp/api/chem/interactive-retrosynthesis"}
             onSubmit={this.handleFormInputSubmit}
             onRespond={this.handleFormInputRespond}
           />
@@ -525,6 +526,8 @@ export default class NetworkExplorer extends React.Component<NetworkExplorerProp
           <ExploreDialog
             data={{node: this.selectedNode}}
             open={this.state.openExploreDialog}
+            exploreRequestURL={"http://162.105.160.202:5000/retronp/api/chem/interactive-retrosynthesis"}
+            addReactionRequestURL={"http://162.105.160.202:5000/retronp/api/smiles-to-reaction"}
             onClose={this.handleExploreDialogClose}
             onExploreSubmit={this.handleNextExploreSubmit}
             onExploreRespond={this.handleNextExploreRespond}

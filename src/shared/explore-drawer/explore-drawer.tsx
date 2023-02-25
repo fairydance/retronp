@@ -1,53 +1,29 @@
 import React from 'react';
-import Draggable from 'react-draggable';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Collapse from '@mui/material/Collapse';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Paper, { PaperProps } from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from "@mui/icons-material/Close";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import StarBorder from '@mui/icons-material/StarBorder';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
-import targetLegend from "../../../assets/images/legends/target.svg"
-import intermediateLegend from "../../../assets/images/legends/intermediate.svg"
-import substrateLegend from "../../../assets/images/legends/substrate.svg"
-import reactionKeyLegend from "../../../assets/images/legends/reaction-key.svg"
-import reactionAuxiliaryLegend from "../../../assets/images/legends/reaction-auxiliary.svg"
-import reactionManualLegend from "../../../assets/images/legends/reaction-manual.svg"
+import targetLegend from "../../assets/images/legends/target.svg"
+import intermediateLegend from "../../assets/images/legends/intermediate.svg"
+import substrateLegend from "../../assets/images/legends/substrate.svg"
+import reactionKeyLegend from "../../assets/images/legends/reaction-key.svg"
+import reactionAuxiliaryLegend from "../../assets/images/legends/reaction-auxiliary.svg"
+import reactionManualLegend from "../../assets/images/legends/reaction-manual.svg"
 import "./explore-drawer.scss"
-
-function PaperComponent(props: PaperProps) {
-  return (
-    <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
-    >
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
 export interface ExploreDrawerProps {
   width: number;
@@ -77,7 +53,6 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
     };
     this.handleLegendButtonClick = this.handleLegendButtonClick.bind(this);
     this.handleLayoutButtonClick = this.handleLayoutButtonClick.bind(this);
-    // this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleLayoutHierarchicalEnabledChange = this.handleLayoutHierarchicalEnabledChange.bind(this);
     this.handleLayoutHierarchicalDirectionChange = this.handleLayoutHierarchicalDirectionChange.bind(this);
   }

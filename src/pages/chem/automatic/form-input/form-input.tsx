@@ -8,6 +8,7 @@ import {secondToHHMMSS} from "../../../../utils/time";
 import "./form-input.scss";
 
 export interface FormInputProps {
+  requestURL: string;
   onSubmit: () => void;
   onRespond: (data: {status: {success: boolean, message: string}, graphs: GraphData[]}, timeElapsed: number) => void;
 }
@@ -28,10 +29,10 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
     super(props);
     this.state = {
       targetSmiles: '',
-      maxDepth: 3,
-      maxIteration: 1,
+      maxDepth: 4,
+      maxIteration: 100,
       maxRunningTime: 30,
-      maxPathwayDisplayed: 5,
+      maxPathwayDisplayed: 20,
       running: false,
       startTime: new Date(),
       endTime: new Date()
@@ -80,7 +81,7 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
     this.setState({running: true, startTime: new Date(), endTime: new Date()});
     const timerID = setInterval(this.tick, 1000);
     this.props.onSubmit();
-    fetch('http://162.105.160.202:5000/retronp/api/chem/pathway-predict', {
+    fetch(this.props.requestURL, {
       method: 'POST',
       body: formData,
     })

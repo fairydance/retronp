@@ -14,12 +14,12 @@ import SaveIcon from "@mui/icons-material/Save";
 import StartIcon from '@mui/icons-material/Start';
 import {Network as VisNetwork, Options as VisOptions, IdType as VisIdType} from "vis-network";
 import {DataSet as VisDataSet} from "vis-data";
-import {NodeData, GraphData, VisData} from "../../../utils/base";
+import {NodeData, EdgeData, GraphData, VisData} from "../../../utils/base";
 import {secondToHHMMSS} from "../../../utils/time";
 import FileInput from "../../../shared/file-input";
 import FormInput from "./form-input"
-import ExploreDrawer from "../explore-drawer"
-import ExploreDialog from "./explore-dialog"
+import ExploreDrawer from "../../../shared/explore-drawer"
+import ExploreDialog from "../../../shared/explore-dialog"
 import SaveDialog from "./save-dialog"
 import "./automatic.scss"
 
@@ -33,9 +33,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export interface PathwayExplorerProps {}
+export interface AutomaticProps {}
 
-export interface PathwayExplorerState {
+export interface AutomaticState {
   currentGraphIdx: number;
   currentAction: string;
   hideSpeedDial: boolean;
@@ -47,7 +47,7 @@ export interface PathwayExplorerState {
   openSaveDialog: boolean;
 }
 
-export default class PathwayExplorer extends React.Component<PathwayExplorerProps, PathwayExplorerState> {
+export default class Automatic extends React.Component<AutomaticProps, AutomaticState> {
   actions: Action[];
   graphDataArray: GraphData[];
   visViewerRef: React.RefObject<HTMLInputElement>;
@@ -60,7 +60,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   private doubleClickThreshold: number;
   private selectedNode: NodeData | undefined;
 
-  constructor(props: PathwayExplorerProps) {
+  constructor(props: AutomaticProps) {
     super(props);
     this.graphDataArray = [{"nodes": [], "edges": []}];
     this.visViewerRef = React.createRef();
@@ -94,6 +94,10 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
       openExploreDialog: false,
       openSaveDialog: false
     };
+    this.getAllReactionNodes = this.getAllReactionNodes.bind(this);
+    this.getAllSubstrateNodes = this.getAllSubstrateNodes.bind(this);
+    this.showReaction = this.showReaction.bind(this);
+    this.hideReaction = this.hideReaction.bind(this);
     this.handleWindowResize = this.handleWindowResize.bind(this);
     this.handleFormInputSubmit = this.handleFormInputSubmit.bind(this);
     this.handleFormInputRespond = this.handleFormInputRespond.bind(this);
@@ -141,7 +145,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
           if (this.clickTime.getTime() - this.doubleClickTime.getTime() > this.doubleClickThreshold) {
             if (params["nodes"].length > 0) {
               this.selectedNode = this.visData.nodes.get(params["nodes"])[0];
-              if (["target", "intermediate", "substrate"].includes(this.selectedNode!.metadata.type)) {
+              if (["target", "intermediate", "substrate", "reaction"].includes(this.selectedNode!.metadata.type)) {
                 console.log(`click node (id=${this.selectedNode!.id})`);
                 this.setState({openExploreDialog: true});
               }
@@ -163,26 +167,88 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   }
 
   loadVisData(graphData: GraphData) {
-    // let showedGraphData: GraphData = {nodes: [], edges: []};
-    // for (const node of graphData.nodes) {
-    //   if (node.metadata.show) {
-    //     showedGraphData.nodes.push(node);
-    //   }
-    // }
-    // for (const edge of graphData.edges) {
-    //   if (edge.metadata.show) {
-    //     showedGraphData.edges.push(edge);
-    //   }
-    // }
-    // this.visData = {
-    //   nodes: new VisDataSet<any>(showedGraphData.nodes),
-    //   edges: new VisDataSet<any>(showedGraphData.edges),
-    // };
     this.visData = {
       nodes: new VisDataSet<any>(graphData.nodes),
       edges: new VisDataSet<any>(graphData.edges),
     };
     this.visNetwork!.setData(this.visData);
+  }
+
+  getAllReactionNodes(targetNode: NodeData): NodeData[] {
+    let reactionNodes: NodeData[] = [];
+    let reactionEdges: {targetSide: EdgeData[], substrateSide: EdgeData[]} = {targetSide: [], substrateSide: []};
+    reactionEdges.targetSide.push(...this.graphDataArray[this.state.currentGraphIdx].edges.filter(edge => edge.to === targetNode.id)!);
+    for (const edge of reactionEdges.targetSide) {
+      reactionNodes.push(...this.graphDataArray[this.state.currentGraphIdx].nodes.filter(node => node.id === edge.from)!);
+    }
+    return reactionNodes;
+  }
+
+  getAllSubstrateNodes(reactionNode: NodeData): NodeData[] {
+    let reactionEdges: {targetSide: EdgeData[], substrateSide: EdgeData[]} = {targetSide: [], substrateSide: []};
+    let substrateNodes: NodeData[] = [];
+    reactionEdges.substrateSide.push(...this.graphDataArray[this.state.currentGraphIdx].edges.filter(edge => edge.to === reactionNode.id)!);
+    for (const edge of reactionEdges.substrateSide) {
+      substrateNodes.push(...this.graphDataArray[this.state.currentGraphIdx].nodes.filter(node => node.id === edge.from)!);
+    }
+    return substrateNodes;
+  }
+
+  getVisReactionBranchIds(reactionNodeId: string): {nodeIds: string[], edgeIds: string[]} {
+    let reactionBranchIds: {nodeIds: string[], edgeIds: string[]} = {nodeIds: [], edgeIds: []};
+    let reactionEdgeIds = this.visNetwork!.getConnectedEdges(reactionNodeId);
+    let substrateNodeIds = this.visNetwork!.getConnectedNodes(reactionNodeId, "from");
+    let substrateNodes = this.visData.nodes.get(substrateNodeIds as VisIdType[]);
+    reactionBranchIds = {nodeIds: [reactionNodeId, ...(substrateNodeIds as string[])], edgeIds: reactionEdgeIds as string[]};
+    for (let substrateNode of substrateNodes) {
+      let _reactionNodeIds = this.visNetwork!.getConnectedNodes(substrateNode.id, "from");
+      for (let _reactionNodeId of _reactionNodeIds) {
+        let _reactionBranchIds = this.getVisReactionBranchIds(_reactionNodeId as string);
+        reactionBranchIds.nodeIds = reactionBranchIds.nodeIds.concat(_reactionBranchIds.nodeIds);
+        reactionBranchIds.edgeIds = reactionBranchIds.edgeIds.concat(_reactionBranchIds.edgeIds);
+      }
+    }
+    return reactionBranchIds;
+  }
+
+  showReaction(reactionNode: NodeData) {
+    let reactionEdges: {targetSide: EdgeData[], substrateSide: EdgeData[]} = {targetSide: [], substrateSide: []};
+    let substrateNodes: NodeData[] = [];
+    reactionEdges.targetSide.push(...this.graphDataArray[this.state.currentGraphIdx].edges.filter(edge => edge.from === reactionNode.id)!);
+    reactionEdges.substrateSide.push(...this.graphDataArray[this.state.currentGraphIdx].edges.filter(edge => edge.to === reactionNode.id)!);
+    for (const edge of reactionEdges.substrateSide) {
+      substrateNodes.push(...this.graphDataArray[this.state.currentGraphIdx].nodes.filter(node => node.id === edge.from)!);
+    }
+
+    reactionNode.metadata.show = true;
+    for (let edge of reactionEdges.targetSide) {
+      edge.metadata.show = true;
+    }
+    for (let node of substrateNodes) {
+      node.metadata.show = true;
+    }
+    for (let edge of reactionEdges.substrateSide) {
+      edge.metadata.show = true;
+    }
+
+    this.visData.nodes.add([reactionNode, ...substrateNodes]);
+    this.visData.edges.add([...reactionEdges.targetSide, ...reactionEdges.substrateSide]);
+  }
+
+  hideReaction(reactionNode: NodeData) {
+    const reactionBranchIds = this.getVisReactionBranchIds(reactionNode.id);
+    for (let node of this.graphDataArray[this.state.currentGraphIdx].nodes) {
+      if (reactionBranchIds.nodeIds.includes(node.id)) {
+        node.metadata.show = false;
+      }
+    }
+    for (let edge of this.graphDataArray[this.state.currentGraphIdx].edges) {
+      if (reactionBranchIds.edgeIds.includes(edge.id)) {
+        edge.metadata.show = false;
+      }
+    }
+    this.visData.edges.remove(reactionBranchIds.edgeIds);
+    this.visData.nodes.remove(reactionBranchIds.nodeIds);
   }
 
   handleWindowResize() {
@@ -317,6 +383,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
         <div className="new-module">
           <div className="pathway-viewer" ref={this.visViewerRef} style={{display: "none"}} />
           <FormInput
+            requestURL={"http://162.105.160.202:5000/retronp/api/chem/automatic-retrosynthesis"}
             onSubmit={this.handleFormInputSubmit}
             onRespond={this.handleFormInputRespond}
           />
@@ -361,6 +428,10 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
             data={{node: this.selectedNode}}
             open={this.state.openExploreDialog}
             onClose={this.handleExploreDialogClose}
+            getAllReactionNodes={this.getAllReactionNodes}
+            getAllSubstrateNodes={this.getAllSubstrateNodes}
+            showReaction={this.showReaction}
+            hideReaction={this.hideReaction}
           />
         </div>
       );

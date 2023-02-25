@@ -30,9 +30,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export interface PathwayExplorerProps {}
+export interface AutomaticProps {}
 
-export interface PathwayExplorerState {
+export interface AutomaticState {
   currentGraphIdx: number;
   currentAction: string;
   hideSpeedDial: boolean;
@@ -43,7 +43,7 @@ export interface PathwayExplorerState {
   openSaveDialog: boolean;
 }
 
-export default class PathwayExplorer extends React.Component<PathwayExplorerProps, PathwayExplorerState> {
+export default class Automatic extends React.Component<AutomaticProps, AutomaticState> {
   actions: Action[];
   graphDataArray: GraphData[];
   visViewerRef: React.RefObject<HTMLInputElement>;
@@ -56,7 +56,7 @@ export default class PathwayExplorer extends React.Component<PathwayExplorerProp
   private doubleClickThreshold: number;
   private selectedNode: NodeData | undefined;
 
-  constructor(props: PathwayExplorerProps) {
+  constructor(props: AutomaticProps) {
     super(props);
     this.graphDataArray = [{"nodes": [], "edges": []}];
     this.visViewerRef = React.createRef();

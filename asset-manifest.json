@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/retronp/static/css/main.36c156f9.css",
+    "main.js": "/retronp/static/js/main.b8c45aac.js",
+    "static/js/27.b7b6c5d8.chunk.js": "/retronp/static/js/27.b7b6c5d8.chunk.js",
+    "static/media/reaction-manual.svg": "/retronp/static/media/reaction-manual.5562867293c0c176b9797a5e040be9b5.svg",
+    "static/media/reaction-auxiliary.svg": "/retronp/static/media/reaction-auxiliary.cfa4937f52bc5c079c0ad333be46d756.svg",
+    "static/media/reaction-key.svg": "/retronp/static/media/reaction-key.55256ef38ac81c19e05ed1bae3002c31.svg",
+    "static/media/intermediate.svg": "/retronp/static/media/intermediate.5abb0d5daeca42a658b3fe4001ddfd35.svg",
+    "static/media/substrate.svg": "/retronp/static/media/substrate.946a207ee6413a1b5527e52b15783726.svg",
+    "index.html": "/retronp/index.html",
+    "static/media/target.svg": "/retronp/static/media/target.774ff44e22d39645152670797102b1bb.svg"
+  },
+  "entrypoints": [
+    "static/css/main.36c156f9.css",
+    "static/js/main.b8c45aac.js"
+  ]
+}

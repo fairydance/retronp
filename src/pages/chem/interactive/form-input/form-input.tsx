@@ -1,13 +1,8 @@
 import React from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
 import LinearProgress from '@mui/material/LinearProgress';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import {GraphData} from "../../../../utils/base";
 import {secondToHHMMSS} from "../../../../utils/time";
 import "./form-input.scss";
@@ -20,7 +15,6 @@ export interface FormInputProps {
 
 export interface FormInputState {
   targetSmiles: string;
-  ruleType: string;
   running: boolean;
   startTime: Date;
   endTime: Date;
@@ -31,14 +25,12 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
     super(props);
     this.state = {
       targetSmiles: '',
-      ruleType: "key",
       running: false,
       startTime: new Date(),
       endTime: new Date()
     };
     this.tick = this.tick.bind(this);
     this.handleTargetSmilesChange = this.handleTargetSmilesChange.bind(this);
-    this.handleRuleTypeChange = this.handleRuleTypeChange.bind(this);
     this.handleInputFormSubmit = this.handleInputFormSubmit.bind(this);
   }
 
@@ -50,15 +42,10 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
     this.setState({targetSmiles: event.target.value});
   }
 
-  handleRuleTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ruleType: event.target.value});
-  }
-
   handleInputFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData();
     formData.append("targetSmiles", this.state.targetSmiles);
-    formData.append("ruleType", this.state.ruleType);
     this.setState({running: true, startTime: new Date(), endTime: new Date()});
     const timerID = setInterval(this.tick, 1000);
     this.props.onSubmit();
@@ -110,18 +97,6 @@ export default class FormInput extends React.Component<FormInputProps, FormInput
             onChange={this.handleTargetSmilesChange}
             disabled={this.state.running}
           />
-          <FormControl className="rule-type-form-control">
-            {/* <FormLabel id="rule-type-radio-buttons-group-label">Rule type</FormLabel> */}
-            <Tooltip title="Rule type" placement="left">
-              <RadioGroup row aria-labelledby="rule-type-radio-buttons-group-label" name="rule-type-radio-buttons-group"
-                value={this.state.ruleType}
-                onChange={this.handleRuleTypeChange}
-              >
-                <FormControlLabel value="key" control={<Radio />} label="Key" disabled={this.state.running} />
-                <FormControlLabel value="auxiliary" control={<Radio />} label="Auxiliary" disabled={this.state.running} />
-              </RadioGroup>
-            </Tooltip>
-          </FormControl>
           <Button variant="contained"
             className="submit-button"
             type="submit"

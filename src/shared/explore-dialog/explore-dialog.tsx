@@ -8,13 +8,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
 import IconButton from "@mui/material/IconButton";
 import Pagination from "@mui/material/Pagination";
 import Paper, { PaperProps } from "@mui/material/Paper";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Tabs from '@mui/material/Tabs';
@@ -30,7 +26,7 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import ListIcon from '@mui/icons-material/List';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import RemoveIcon from '@mui/icons-material/Remove';
-import {NodeData, GraphData, EdgeData} from "../../utils/base";
+import {NodeData, GraphData} from "../../utils/base";
 import {secondToHHMMSS} from "../../utils/time";
 import "./explore-dialog.scss"
 
@@ -481,17 +477,6 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                   }}
                 >
                   <form className="explore-form" onSubmit={this.handleExploreFormSubmit}>
-                    <FormControl className="rule-type-form-control">
-                      <Tooltip title="Rule type" placement="left">
-                        <RadioGroup row aria-labelledby="rule-type-radio-buttons-group-label" name="rule-type-radio-buttons-group"
-                          value={this.state.ruleTypeForExploration}
-                          onChange={this.handleExploreRuleTypeChange}
-                        >
-                          <FormControlLabel value="key" control={<Radio />} label="Key" disabled={this.state.exploringReaction} />
-                          <FormControlLabel value="auxiliary" control={<Radio />} label="Auxiliary" disabled={this.state.exploringReaction} />
-                        </RadioGroup>
-                      </Tooltip>
-                    </FormControl>
                     <Button variant="contained"
                       className="explore-submit-button"
                       type="submit"

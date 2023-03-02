@@ -418,7 +418,7 @@ export default class Automatic extends React.Component<AutomaticProps, Automatic
             <StartIcon />
           </IconButton>
           <ExploreDrawer
-            width={250}
+            width={300}
             open={this.state.openExploreDrawer}
             initData={{layout: this.visOptions.layout}}
             onClose={this.handleExploreDrawerClose}

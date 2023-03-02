@@ -18,9 +18,11 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import targetLegend from "../../assets/images/legends/target.svg"
-import intermediateLegend from "../../assets/images/legends/intermediate.svg"
+import intermediateExploredLegend from "../../assets/images/legends/intermediate-explored.svg"
+import intermediateUnexploredLegend from "../../assets/images/legends/intermediate-unexplored.svg"
 import substrateLegend from "../../assets/images/legends/substrate.svg"
 import reactionKeyLegend from "../../assets/images/legends/reaction-key.svg"
+import reactionTwoStepLegend from "../../assets/images/legends/reaction-two-step.svg"
 import reactionAuxiliaryLegend from "../../assets/images/legends/reaction-auxiliary.svg"
 import reactionManualLegend from "../../assets/images/legends/reaction-manual.svg"
 import "./explore-drawer.scss"
@@ -125,9 +127,15 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
                   </ListItem>
                   <ListItem disablePadding sx={{ pl: 4 }}>
                     <ListItemIcon>
-                      <img src={intermediateLegend} style={{width: "1rem"}} />
+                      <img src={intermediateExploredLegend} style={{width: "1rem"}} />
                     </ListItemIcon>
-                    <ListItemText primary="intermediate" />
+                    <ListItemText primary="intermediate (explored)" />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <img src={intermediateUnexploredLegend} style={{width: "1rem"}} />
+                    </ListItemIcon>
+                    <ListItemText primary="intermediate (unexplored)" />
                   </ListItem>
                   <ListItem disablePadding sx={{ pl: 4 }}>
                     <ListItemIcon>
@@ -140,6 +148,12 @@ export default class ExploreDrawer extends React.Component<ExploreDrawerProps, E
                       <img src={reactionKeyLegend} style={{width: "1rem"}} />
                     </ListItemIcon>
                     <ListItemText primary="reaction (key)" />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <img src={reactionTwoStepLegend} style={{width: "1rem"}} />
+                    </ListItemIcon>
+                    <ListItemText primary="reaction (two step)" />
                   </ListItem>
                   <ListItem disablePadding sx={{ pl: 4 }}>
                     <ListItemIcon>

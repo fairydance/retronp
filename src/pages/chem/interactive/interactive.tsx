@@ -517,7 +517,7 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
             <StartIcon />
           </IconButton>
           <ExploreDrawer
-            width={250}
+            width={300}
             open={this.state.openExploreDrawer}
             initData={{layout: this.visOptions.layout}}
             onClose={this.handleExploreDrawerClose}

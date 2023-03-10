@@ -104,6 +104,7 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
     this.handleNextExploreSubmit = this.handleNextExploreSubmit.bind(this);
     this.handleNextExploreRespond = this.handleNextExploreRespond.bind(this);
     this.handleAddReaction = this.handleAddReaction.bind(this);
+    this.handleRenderMolecule = this.handleRenderMolecule.bind(this);
     this.handleSaveDialogClose = this.handleSaveDialogClose.bind(this);
     this.handleNetworkSave = this.handleNetworkSave.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
@@ -434,6 +435,26 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
     }
   }
 
+  handleRenderMolecule(data: {status: {success: boolean, message: string}, image: string}) {
+    if (data.status.success) {
+      console.log(data.image);
+      this.selectedNode!.image = data.image;
+      this.visData.nodes.update(this.selectedNode!);
+      this.setState({
+        openExploreDialog: false,
+        openSnackbar: true,
+        alertSeverity: "success",
+        snackbarMessage: "Molecule is redrawed."
+      });
+    } else {
+      this.setState({
+        openSnackbar: true,
+        alertSeverity: "error",
+        snackbarMessage: data.status.message
+      });
+    }
+  }
+
   handleSaveDialogClose() {
     this.setState({openSaveDialog: false});
   }
@@ -528,10 +549,12 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
             open={this.state.openExploreDialog}
             exploreRequestURL={"http://162.105.160.202:5000/retronp/api/chem/interactive-retrosynthesis"}
             addReactionRequestURL={"http://162.105.160.202:5000/retronp/api/smiles-to-reaction"}
+            renderMoleculeRequestURL={"http://162.105.160.202:5000/retronp/api/molecule-render"}
             onClose={this.handleExploreDialogClose}
             onExploreSubmit={this.handleNextExploreSubmit}
             onExploreRespond={this.handleNextExploreRespond}
             onAddReaction={this.handleAddReaction}
+            onRenderMolecule={this.handleRenderMolecule}
             getAllReactionNodes={this.getAllReactionNodes}
             getAllSubstrateNodes={this.getAllSubstrateNodes}
             showReaction={this.showReaction}

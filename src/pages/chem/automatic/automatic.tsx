@@ -107,6 +107,7 @@ export default class Automatic extends React.Component<AutomaticProps, Automatic
     this.handleVisNetworkLayoutApply = this.handleVisNetworkLayoutApply.bind(this);
     this.handleExploreDrawerClose = this.handleExploreDrawerClose.bind(this);
     this.handleExploreDialogClose = this.handleExploreDialogClose.bind(this);
+    this.handleRenderMolecule = this.handleRenderMolecule.bind(this);
     this.handleSaveDialogClose = this.handleSaveDialogClose.bind(this);
     this.handlePathwaySave = this.handlePathwaySave.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
@@ -327,6 +328,26 @@ export default class Automatic extends React.Component<AutomaticProps, Automatic
     this.setState({openExploreDialog: false});
   }
 
+  handleRenderMolecule(data: {status: {success: boolean, message: string}, image: string}) {
+    if (data.status.success) {
+      console.log(data.image);
+      this.selectedNode!.image = data.image;
+      this.visData.nodes.update(this.selectedNode!);
+      this.setState({
+        openExploreDialog: false,
+        openSnackbar: true,
+        alertSeverity: "success",
+        snackbarMessage: "Molecule is redrawed."
+      });
+    } else {
+      this.setState({
+        openSnackbar: true,
+        alertSeverity: "error",
+        snackbarMessage: data.status.message
+      });
+    }
+  }
+
   handleSaveDialogClose() {
     this.setState({openSaveDialog: false});
   }
@@ -427,6 +448,8 @@ export default class Automatic extends React.Component<AutomaticProps, Automatic
           <ExploreDialog
             data={{node: this.selectedNode}}
             open={this.state.openExploreDialog}
+            renderMoleculeRequestURL={"http://162.105.160.202:5000/retronp/api/molecule-render"}
+            onRenderMolecule={this.handleRenderMolecule}
             onClose={this.handleExploreDialogClose}
             getAllReactionNodes={this.getAllReactionNodes}
             getAllSubstrateNodes={this.getAllSubstrateNodes}

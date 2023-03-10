@@ -8,9 +8,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from '@mui/material/FormControl';
 import IconButton from "@mui/material/IconButton";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Pagination from "@mui/material/Pagination";
 import Paper, { PaperProps } from "@mui/material/Paper";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Tabs from '@mui/material/Tabs';
@@ -25,10 +29,12 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ExploreIcon from '@mui/icons-material/Explore';
 import ListIcon from '@mui/icons-material/List';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {NodeData, GraphData} from "../../utils/base";
 import {secondToHHMMSS} from "../../utils/time";
 import "./explore-dialog.scss"
+import { margin } from "@mui/system";
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -46,10 +52,12 @@ export interface ExploreDialogProps {
   open: boolean;
   exploreRequestURL: string;
   addReactionRequestURL: string;
+  renderMoleculeRequestURL: string;
   onClose: () => void;
   onExploreSubmit: () => void;
   onExploreRespond: (data: {status: {success: boolean, message: string}, graph: GraphData}, timeElapsed: number) => void;
   onAddReaction: (data: {status: {success: boolean, message: string}, graph: GraphData}) => void;
+  onRenderMolecule: (data: {status: {success: boolean, message: string}, image: string}) => void;
   getAllReactionNodes: (targetNode: NodeData) => NodeData[];
   getAllSubstrateNodes: (reactionNode: NodeData) => NodeData[];
   showReaction: (reactionNode: NodeData) => void;
@@ -64,13 +72,15 @@ export interface ExploreDialogState {
   networkUpdateTime: Date;
   ruleTypeForExploration: string;
   addingReaction: boolean;
+  renderingMolecule: boolean;
   reactantSmiles: string;
   reactionLabel: string;
   reactionSmarts: string;
   allReactionNodes: NodeData[];
   partialReactionNodes: NodeData[];
   showedReactionIndex: number;
-  ruleTypeForVisualization: string
+  ruleTypeForVisualization: string;
+  moleculeDrawEngine: string;
 }
 
 export default class ExploreDialog extends React.Component<ExploreDialogProps, ExploreDialogState> {
@@ -80,6 +90,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
     onExploreSubmit: () => null,
     onExploreRespond: () => null,
     onAddReaction: () => null,
+    onRenderMolecule: () => null,
   };
 
   constructor(props: ExploreDialogProps) {
@@ -92,6 +103,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
       networkUpdateTime: new Date(),
       ruleTypeForExploration: "key",
       addingReaction: false,
+      renderingMolecule: false,
       reactantSmiles: '',
       reactionLabel: '',
       reactionSmarts: '',
@@ -99,6 +111,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
       partialReactionNodes: [],
       showedReactionIndex: 1,
       ruleTypeForVisualization: "key",
+      moleculeDrawEngine: "rdkit",
     };
     this.tick = this.tick.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
@@ -116,6 +129,8 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
     this.handleReactionChange = this.handleReactionChange.bind(this);
     this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
+    this.handleMoleculeDrawEngineSelectChange = this.handleMoleculeDrawEngineSelectChange.bind(this);
+    this.handleMoleculeRedrawButtonClick = this.handleMoleculeRedrawButtonClick.bind(this);
   }
 
   componentDidUpdate(prevProps: ExploreDialogProps) {
@@ -267,6 +282,31 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
     }));
   }
 
+  handleMoleculeDrawEngineSelectChange(event: SelectChangeEvent) {
+    this.setState({moleculeDrawEngine: event.target.value})
+  }
+
+  handleMoleculeRedrawButtonClick() {
+    const formData = new FormData();
+    formData.append("smiles", this.props.data.node!.metadata!.smiles!);
+    formData.append("drawEngine", this.state.moleculeDrawEngine);
+    this.setState({renderingMolecule: true});
+    fetch(this.props.renderMoleculeRequestURL, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+      this.props.onRenderMolecule(data);
+      this.setState({renderingMolecule: false});
+    })
+    .catch(err => {
+      console.error(err);
+      this.props.onRenderMolecule({status: {success: false, message: "Draw failed."}, image: ''});
+      this.setState({renderingMolecule: false});
+    });
+  }
+
   render(): React.ReactNode {
     let mainElement: JSX.Element;
     let closeButton = (
@@ -368,6 +408,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                 color="primary"
                 aria-label="explore"
                 onClick={this.handleExploreButtonClick}
+                disabled={this.state.renderingMolecule}
               >
                 <ExploreIcon />
               </IconButton>
@@ -382,7 +423,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                   color="primary"
                   aria-label="add a reaction"
                   onClick={this.handleAddReactionButtonClick}
-                  disabled={this.state.exploringReaction}
+                  disabled={this.state.exploringReaction || this.state.renderingMolecule}
                 >
                   <PlaylistAddIcon />
                 </IconButton>
@@ -392,7 +433,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                   color="primary"
                   aria-label="view all reactions"
                   onClick={this.handleViewAllReactionsButtonClick}
-                  disabled={this.state.exploringReaction}
+                  disabled={this.state.exploringReaction || this.state.renderingMolecule}
                 >
                   <ListIcon />
                 </IconButton>
@@ -415,6 +456,41 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
                     alignItems: "center"
                   }}
                 >
+                  <Box className="redraw-operation"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FormControl sx={{ mt: 1, mr: 1, minWidth: "15rem" }} size="small">
+                      <InputLabel id="demo-select-small">Drawing Engine</InputLabel>
+                      <Select
+                        labelId="demo-select-small"
+                        id="demo-select-small"
+                        value={this.state.moleculeDrawEngine}
+                        label="Drawing Engine"
+                        onChange={this.handleMoleculeDrawEngineSelectChange}
+                        disabled={this.state.renderingMolecule}
+                      >
+                        <MenuItem value={"rdkit"}>RDKit</MenuItem>
+                        <MenuItem value={"marvin"}>Marvin</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Tooltip title="Redraw" placement="right">
+                      <IconButton 
+                        color="primary"
+                        sx={{
+                          mt: 1
+                        }}
+                        aria-label="redraw"
+                        onClick={this.handleMoleculeRedrawButtonClick}
+                        disabled={this.state.renderingMolecule}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                   <img src={this.props.data.node.image} />
                   <div style={{width: "100%", wordBreak: "break-all"}}>
                     <b>SMILES:</b>&nbsp;{this.props.data.node.metadata.smiles}

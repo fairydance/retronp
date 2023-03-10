@@ -507,7 +507,7 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
         <div className="new-module">
           <div className="network-viewer" ref={this.visViewerRef} style={{display: "none"}} />
           <FormInput
-            requestURL={"http://162.105.160.202:5000/retronp/api/chem/interactive-retrosynthesis"}
+            requestURL={"http://162.105.160.202:5000/retronp/api/chem/interactive-retrosynthesis-test"}
             onSubmit={this.handleFormInputSubmit}
             onRespond={this.handleFormInputRespond}
           />

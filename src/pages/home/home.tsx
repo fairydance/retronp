@@ -58,6 +58,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
               <CardActions>
                 <Button component={RouterLink} to="chem/interactive" sx={{ width: "100%" }}>Interactive</Button>
                 <Button component={RouterLink} to="chem/automatic" sx={{ width: "100%" }}>Automatic</Button>
+                <Button component={RouterLink} to="chem/interactive-test" sx={{ width: "100%" }}>Interactive Test</Button>
               </CardActions>
             </Card>
             <Card className="home-module-card" sx={{ width: "100%" }}>

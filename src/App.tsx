@@ -6,6 +6,7 @@ import {default as BioInteractive} from "./pages/bio/interactive"
 import {default as BioAutomatic} from "./pages/bio/automatic"
 import {default as ChemInteractive} from "./pages/chem/interactive"
 import {default as ChemAutomatic} from "./pages/chem/automatic"
+import {default as ChemInteractiveTest} from "./pages/chem/interactive-test"
 import NetworkViewer from './pages/network-viewer'
 import About from "./pages/about"
 import './App.scss';
@@ -32,6 +33,7 @@ export default class App extends React.Component<AppProps, AppState> {
             <Route path="/bio/automatic" element={<BioAutomatic />} />
             <Route path="/chem/interactive" element={<ChemInteractive />} />
             <Route path="/chem/automatic" element={<ChemAutomatic />} />
+            <Route path="/chem/interactive-test" element={<ChemInteractiveTest />} />
             {/* <Route path="/network-viewer" element={<NetworkViewer />} /> */}
             <Route path="/about" element={<About />} />
           </Routes>

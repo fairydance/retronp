@@ -151,7 +151,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
   }
 
   handleDialogClose() {
-    if (!this.state.exploringReaction && !this.state.addingReaction) {
+    if (!this.state.exploringReaction && !this.state.addingReaction && !this.state.renderingMolecule) {
       this.props.onClose();
     }
   }
@@ -330,18 +330,7 @@ export default class ExploreDialog extends React.Component<ExploreDialogProps, E
           <>
             <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
               Currently Selected
-              <IconButton
-                aria-label="close"
-                onClick={this.props.onClose}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
+              {closeButton}
             </DialogTitle>
             <DialogContent dividers className="explore-dialog-content">
               <DialogContentText

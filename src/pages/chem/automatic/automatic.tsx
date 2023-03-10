@@ -334,7 +334,6 @@ export default class Automatic extends React.Component<AutomaticProps, Automatic
       this.selectedNode!.image = data.image;
       this.visData.nodes.update(this.selectedNode!);
       this.setState({
-        openExploreDialog: false,
         openSnackbar: true,
         alertSeverity: "success",
         snackbarMessage: "Molecule is redrawed."

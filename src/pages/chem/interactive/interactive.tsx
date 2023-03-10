@@ -441,7 +441,6 @@ export default class Interactive extends React.Component<InteractiveProps, Inter
       this.selectedNode!.image = data.image;
       this.visData.nodes.update(this.selectedNode!);
       this.setState({
-        openExploreDialog: false,
         openSnackbar: true,
         alertSeverity: "success",
         snackbarMessage: "Molecule is redrawed."

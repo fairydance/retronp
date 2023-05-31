@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/retronp/static/css/main.5d1a8bca.css",
+    "main.js": "/retronp/static/js/main.5dc5fea8.js",
+    "static/js/27.b7b6c5d8.chunk.js": "/retronp/static/js/27.b7b6c5d8.chunk.js",
+    "static/media/reaction-two-step.svg": "/retronp/static/media/reaction-two-step.e06c0dee122a3df60da9cc893acf6284.svg",
+    "static/media/intermediate-unexplored.svg": "/retronp/static/media/intermediate-unexplored.53f53b598a48f279266301f40d88fa38.svg",
+    "static/media/reaction-manual.svg": "/retronp/static/media/reaction-manual.5562867293c0c176b9797a5e040be9b5.svg",
+    "static/media/reaction-auxiliary.svg": "/retronp/static/media/reaction-auxiliary.cfa4937f52bc5c079c0ad333be46d756.svg",
+    "static/media/reaction-key.svg": "/retronp/static/media/reaction-key.55256ef38ac81c19e05ed1bae3002c31.svg",
+    "static/media/intermediate-explored.svg": "/retronp/static/media/intermediate-explored.5abb0d5daeca42a658b3fe4001ddfd35.svg",
+    "static/media/substrate.svg": "/retronp/static/media/substrate.946a207ee6413a1b5527e52b15783726.svg",
+    "index.html": "/retronp/index.html",
+    "static/media/target.svg": "/retronp/static/media/target.774ff44e22d39645152670797102b1bb.svg"
+  },
+  "entrypoints": [
+    "static/css/main.5d1a8bca.css",
+    "static/js/main.5dc5fea8.js"
+  ]
+}
